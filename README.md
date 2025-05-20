@@ -387,6 +387,7 @@ First, you'll need a basic understanding of common principles, learning about wh
     * Load balancing
     * Database replication
     * Database partitioning
+    * [RAID](https://www.geeksforgeeks.org/raid-redundant-arrays-of-independent-disks/)
 
 ### Step 2: Review the scalability article
 
