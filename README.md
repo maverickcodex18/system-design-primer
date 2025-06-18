@@ -496,6 +496,17 @@ After a write, reads will see it.  Data is replicated synchronously.
 
 This approach is seen in file systems and RDBMSes.  Strong consistency works well in systems that need transactions.
 
+### Difference between Consistency Patterns
+
+| Feature                 | Strong Consistency    | Eventual Consistency         | Weak Consistency         |
+| ----------------------- | --------------------- | ---------------------------- | ------------------------ |
+| **Read after write**    | Always returns latest | Might return stale value     | No guarantee             |
+| **Availability**        | Lower                 | High                         | Very high                |
+| **Latency**             | High                  | Low                          | Very low                 |
+| **Partition tolerance** | Low-medium            | High                         | Very high                |
+| **Use case fit**        | Critical data systems | User-facing large-scale apps | Real-time, lossy systems |
+
+
 ### Source(s) and further reading
 
 * [Transactions across data centers](http://snarfed.org/transactions_across_datacenters_io.html)
