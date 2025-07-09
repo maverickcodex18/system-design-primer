@@ -490,6 +490,8 @@ After a write, reads will eventually see it (typically within milliseconds).  Da
 
 This approach is seen in systems such as DNS and email.  Eventual consistency works well in highly available systems.
 
+https://www.scylladb.com/glossary/eventual-consistency/#:~:text=Eventual%20Consistency%20is%20a%20guarantee,time%20the%20data%20is%20queried. 
+
 ### Strong consistency
 
 After a write, reads will see it.  Data is replicated synchronously.
