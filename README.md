@@ -1540,6 +1540,27 @@ PUT /someresources/anId
 
 REST is focused on exposing data.  It minimizes the coupling between client/server and is often used for public HTTP APIs.  REST uses a more generic and uniform method of exposing resources through URIs, [representation through headers](https://github.com/for-GET/know-your-http-well/blob/master/headers.md), and actions through verbs such as GET, POST, PUT, DELETE, and PATCH.  Being stateless, REST is great for horizontal scaling and partitioning.
 
+1. How REST enables horizontal scaling and partitioning
+
+The key is statelessness. Because every REST request contains all the information the server needs (no session stored on the server), any server in your cluster can handle any request. This means:
+
+You can put a load balancer in front of 10 identical servers, and it doesn't matter which one handles the request — they're all interchangeable
+Need more capacity? Just add more servers behind the load balancer. That's horizontal scaling.
+You can partition your servers by function too — some handle URL creation (POST), others handle redirects (GET). Each group scales independently based on traffic patterns.
+Compare this to a stateful protocol where server A remembers your session — now you're stuck routing all your requests to server A. That's a scaling bottleneck.
+
+2. How all communication must be stateless and cacheable
+
+Stateless means the server doesn't remember anything between requests. Every request must carry everything needed to process it — authentication tokens, parameters, all of it. The server processes it, responds, and forgets about you.
+
+Why this matters: if server A crashes mid-conversation, server B can pick up the next request with zero issues. No session data was lost because there was none.
+
+Cacheable means responses should indicate whether they can be cached and for how long. For our URL shortener:
+
+GET /abc123 → redirects to https://example.com/long-url — this mapping rarely changes, so it's highly cacheable. You can cache it at CDN level, browser level, or a reverse proxy. This dramatically reduces load on your servers.
+POST /urls → creates a new short URL — this is NOT cacheable since each request creates something new.
+The HTTP headers like Cache-Control, ETag, and Expires are how REST communicates cacheability. For a read-heavy service like a URL shortener (100:1 read-to-write), caching is huge — most redirect requests never even hit your application servers.
+
 #### Disadvantage(s): REST
 
 * With REST being focused on exposing data, it might not be a good fit if resources are not naturally organized or accessed in a simple hierarchy.  For example, returning all updated records from the past hour matching a particular set of events is not easily expressed as a path.  With REST, it is likely to be implemented with a combination of URI path, query parameters, and possibly the request body.
